@@ -1,13 +1,12 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: bookstack
+  name: mysql
   namespace: bookstack-dev
 spec:
   selector:
-    app: bookstack
+    app: mariadb
   ports:
-    - protocol: TCP
-      port: 80
-      targetPort: 80
+    - port: 3306
+      targetPort: 3306
   type: ClusterIP

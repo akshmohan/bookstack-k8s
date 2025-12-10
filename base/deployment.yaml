@@ -2,7 +2,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: bookstack
-  namespace: bookstack
+  namespace: bookstack-dev
 spec:
   replicas: 1
   selector:
@@ -13,16 +13,49 @@ spec:
       labels:
         app: bookstack
     spec:
+      initContainers:
+        - name: wait-for-db
+          image: busybox:1.36
+          command:
+            - sh
+            - -c
+            - |
+              until nc -zv mysql 3306; do
+                echo "Waiting for DB..."
+                sleep 5
+              done
       containers:
         - name: bookstack
-          image: <your-dockerhub-username>/bookstack:latest
+          image: linuxserver/bookstack:latest
           ports:
             - containerPort: 80
+          env:
+          - name: APP_KEY
+            value: "base64:bl9ImHza6KZElnrJUyHAqkkJjXzbQbnc8P36owxC0Qs="
+          - name: APP_URL
+            value: "http://localhost:8080"
+          - name: DB_HOST
+            value: "mysql"
+          - name: DB_PORT
+            value: "3306"
+          - name: DB_DATABASE
+            valueFrom:
+              secretKeyRef:
+                name: bookstack-db-secrets
+                key: MYSQL_DATABASE
+          - name: DB_USERNAME
+            valueFrom:
+              secretKeyRef:
+                name: bookstack-db-secrets
+                key: MYSQL_USER
+          - name: DB_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                name: bookstack-db-secrets
+                key: MYSQL_PASSWORD
           envFrom:
-            - configMapRef:
-                name: bookstack-config
             - secretRef:
-                name: bookstack-secrets
+                name: bookstack-db-secrets
           volumeMounts:
             - name: bookstack-storage
               mountPath: /var/www/bookstack/public/uploads
