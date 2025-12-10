@@ -1,0 +1,32 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: bookstack
+  namespace: bookstack
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: bookstack
+  template:
+    metadata:
+      labels:
+        app: bookstack
+    spec:
+      containers:
+        - name: bookstack
+          image: <your-dockerhub-username>/bookstack:latest
+          ports:
+            - containerPort: 80
+          envFrom:
+            - configMapRef:
+                name: bookstack-config
+            - secretRef:
+                name: bookstack-secrets
+          volumeMounts:
+            - name: bookstack-storage
+              mountPath: /var/www/bookstack/public/uploads
+      volumes:
+        - name: bookstack-storage
+          persistentVolumeClaim:
+            claimName: bookstack-data

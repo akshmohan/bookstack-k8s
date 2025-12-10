@@ -1,0 +1,8 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: bookstack-config
+  namespace: bookstack
+data:
+  APP_URL: "http://bookstack.example.com"
+  DB_HOST: "bookstack-db"
