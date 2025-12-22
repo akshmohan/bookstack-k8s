@@ -8,8 +8,8 @@ metadata:
 spec:
   selector:
     matchLabels:
-      app: bookstack
+      app: mariadb  # <--- Change this from 'bookstack'
   endpoints:
-  - port: http
+  - port: metrics   # <--- Change this from 'http' to match the Service port name
     interval: 30s
     path: /metrics

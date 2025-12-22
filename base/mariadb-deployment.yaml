@@ -30,6 +30,15 @@ spec:
           volumeMounts:
             - name: mariadb-storage
               mountPath: /var/lib/mysql
+        # MOVED THIS HERE: Inside 'containers', not 'volumes'
+        - name: mysqld-exporter
+          image: prom/mysqld-exporter
+          env:
+            - name: DATA_SOURCE_NAME
+              value: "root:$(MYSQL_ROOT_PASSWORD)@(localhost:3306)/"
+          ports:
+            - containerPort: 9104
+              name: metrics
       volumes:
         - name: mariadb-storage
           persistentVolumeClaim:
