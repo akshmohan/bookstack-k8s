@@ -9,9 +9,6 @@ spec:
   selector:
     matchLabels:
       app: bookstack
-  namespaceSelector:
-    matchNamespaces:
-      - bookstack-dev
   endpoints:
   - port: http
     interval: 30s
