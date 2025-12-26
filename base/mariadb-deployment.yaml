@@ -35,7 +35,10 @@ spec:
           image: prom/mysqld-exporter
           env:
             - name: DATA_SOURCE_NAME
-              value: "root:$(MYSQL_ROOT_PASSWORD)@(localhost:3306)/"
+              value: "root:$(MYSQL_ROOT_PASSWORD)@tcp(localhost:3306)/"
+          envFrom:
+            - secretRef:
+                name: bookstack-db-secrets
           ports:
             - containerPort: 9104
               name: metrics
