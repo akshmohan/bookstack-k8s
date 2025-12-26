@@ -10,5 +10,8 @@ resources:
   - pvc.yaml
   - deployment.yaml
   - service.yaml
+  - mariadb-deployment.yaml
+  - mariadb-service.yaml
+  - mariadb-pvc.yaml
   - servicemonitor.yaml
 
