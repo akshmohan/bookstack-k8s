@@ -8,7 +8,7 @@ resources:
   - secrets.yaml
   - configmap.yaml
   - pvc.yaml
-  - deployment.yaml
-  - service.yaml
+  - mariadb-deployment.yaml  # ADD THIS
+  - deployment.yaml          # This is Bookstack
+  - service.yaml             # Ensure this file contains BOTH services
   - servicemonitor.yaml
-

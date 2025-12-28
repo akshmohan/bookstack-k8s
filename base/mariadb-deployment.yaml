@@ -16,26 +16,19 @@ spec:
       containers:
         - name: mariadb
           image: mariadb:11
-          ports:
-            - containerPort: 3306
           envFrom:
             - secretRef:
                 name: bookstack-db-secrets
+        - name: mysqld-exporter
+          image: prom/mysqld-exporter
           env:
             - name: MYSQL_ROOT_PASSWORD
               valueFrom:
                 secretKeyRef:
                   name: bookstack-db-secrets
                   key: MYSQL_ROOT_PASSWORD
-          volumeMounts:
-            - name: mariadb-storage
-              mountPath: /var/lib/mysql
-        # MOVED THIS HERE: Inside 'containers', not 'volumes'
-        - name: mysqld-exporter
-          image: prom/mysqld-exporter
-          env:
             - name: DATA_SOURCE_NAME
-              value: "root:$(MYSQL_ROOT_PASSWORD)@(localhost:3306)/"
+              value: "root:$(MYSQL_ROOT_PASSWORD)@tcp(localhost:3306)/"
           ports:
             - containerPort: 9104
               name: metrics

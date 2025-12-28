@@ -14,3 +14,22 @@ spec:
       port: 80
       targetPort: 80
   type: ClusterIP
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: mariadb
+  namespace: bookstack-dev
+  labels:
+    app: mariadb
+spec:
+  selector:
+    app: mariadb
+  ports:
+    - name: mysql
+      port: 3306
+      targetPort: 3306
+    - name: metrics
+      port: 9104
+      targetPort: 9104
+  type: ClusterIP
