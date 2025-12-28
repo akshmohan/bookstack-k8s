@@ -24,8 +24,10 @@ spec:
               mountPath: /var/lib/mysql      
         - name: mysqld-exporter
           image: prom/mysqld-exporter
-          # Add this args section to force it to ignore the missing .my.cnf
-          args:
+          # Do NOT use a separate 'args' block. Put everything in 'command'.
+          command:
+            - "/bin/mysqld_exporter"
+            - "--config.my-cnf=" 
             - "--collect.info_schema.processlist"
             - "--collect.info_schema.innodb_metrics"
           env:
@@ -35,7 +37,6 @@ spec:
                   name: bookstack-db-secrets
                   key: MYSQL_ROOT_PASSWORD
             - name: DATA_SOURCE_NAME
-              # ENSURE NO SPACES after the = sign
               value: "root:$(MYSQL_ROOT_PASSWORD)@tcp(localhost:3306)/"
           ports:
             - containerPort: 9104
