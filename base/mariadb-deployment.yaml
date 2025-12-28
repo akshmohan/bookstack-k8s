@@ -19,6 +19,9 @@ spec:
           envFrom:
             - secretRef:
                 name: bookstack-db-secrets
+          volumeMounts:             # THIS IS MISSING
+            - name: mariadb-storage
+              mountPath: /var/lib/mysql      
         - name: mysqld-exporter
           image: prom/mysqld-exporter
           env:
